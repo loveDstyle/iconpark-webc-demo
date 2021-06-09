@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="IconPark web component demo"
+    />
+    <title>IconPark web component demo</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <iconpark-icon icon-id="235"></iconpark-icon>
+      <iconpark-icon spin icon-id="15646"></iconpark-icon>
+    </div>
+    <script>
+      (function () {
+      function polyfillsLoader() {
+        function loadScript(src, type, attrs) {
+          var attributes = attrs || [];
+          return new Promise(function (resolve) {
+            var script = document.createElement('script');
+    
+            function onLoaded() {
+              if (script.parentElement) {
+                script.parentElement.removeChild(script);
+              }
+              resolve();
+            }
+    
+            script.src = src;
+            script.onload = onLoaded;
+            attributes.forEach(function (att){
+              script.setAttribute(att.name, att.value);
+            });
+    
+            script.onerror = function () {
+              console.error('[polyfills-loader] failed to load: ' + src + ' check the network tab for HTTP status.');
+              onLoaded();
+            };
+    
+            if (type) script.type = type;
+            document.head.appendChild(script);
+          });
+        }
+    
+        var polyfills = [];
+    
+        if (!('noModule' in HTMLScriptElement.prototype)) {
+          polyfills.push(loadScript('https://unpkg.com/regenerator-runtime@0.12.1/runtime.js'));
+        }
+    
+        if (!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || window.ShadyDOM && window.ShadyDOM.force) {
+          polyfills.push(loadScript('https://unpkg.com/@webcomponents/webcomponentsjs@2.5.0/webcomponents-bundle.js'));
+        }
+    
+        if (!('noModule' in HTMLScriptElement.prototype) && 'getRootNode' in Element.prototype) {
+          polyfills.push(loadScript('https://unpkg.com/@webcomponents/webcomponentsjs@2.5.0/custom-elements-es5-adapter.js'));
+        }
+    
+        if (!('attachShadow' in Element.prototype)) {
+          polyfills.push(loadScript('https://www.unpkg.com/lit@2.0.0-rc.2/polyfill-support.js'));
+        }
+    
+        function loadFiles() {
+          if (!('noModule' in HTMLScriptElement.prototype)) {
+            loadScript('https://sf1-hscdn-tos.pstatp.com/obj/iconpark/icons_1_10.307a8c9ca2dcaa71b6b5bb7e2d47a039.es5.js')
+          } else {
+            loadScript('https://sf1-hscdn-tos.pstatp.com/obj/iconpark/icons_1_10.307a8c9ca2dcaa71b6b5bb7e2d47a039.js', 'module', []);
+          }
+        }
+    
+        if (polyfills.length) {
+          Promise.all(polyfills).then(loadFiles);
+        } else {
+          loadFiles();
+        }
+      }
+    
+      if (!('noModule' in HTMLScriptElement.prototype)) {
+        var s = document.createElement('script');
+        function onLoaded() {
+          document.head.removeChild(s);
+          polyfillsLoader();
+        }
+        s.src = "https://cdnjs.cloudflare.com/ajax/libs/core-js/3.14.0/minified.min.js";
+        s.onload = onLoaded;
+        s.onerror = function () {
+          console.error('[polyfills-loader] failed to load: ' + s.src + ' check the network tab for HTTP status.');
+          onLoaded();
+        };
+        document.head.appendChild(s);
+      } else {
+        polyfillsLoader();
+      }
+    })();
+    </script>
+  </body>
+</html>
