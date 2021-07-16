@@ -81,7 +81,7 @@
         }
       }
     
-      if (!('noModule' in HTMLScriptElement.prototype)) {
+      if (!('noModule' in HTMLScriptElement.prototype) || !(globalThis && typeof globalThis == 'object')) {
         var s = document.createElement('script');
         function onLoaded() {
           document.head.removeChild(s);
